@@ -74,3 +74,36 @@ Max Connections   : {}
         )
     }
 }
+
+//Parsing the server Configuration arguments.
+fn args_validation ()-> Result<() , String> {
+    let config = Config::parse();
+
+    if (1024..=65535).contains(&config.port) {
+        return Err("The port is invalide".to_string())
+    }
+    if config.cache_size <= 0 {
+        return Err("The cache cann't be negative".to_string())
+    }
+    if config.idle_time_out <= 0 {
+        return  Err("The idle time limit can't be negative".to_string())
+    }
+
+    if config.cache_time_limit <= 0 {
+        return Err("The time for which cache is stored can't be negative".to_string())
+    }
+
+    if config.read_time_out <= 0 {
+        return Err("The read time can't can be negative".to_string())
+    }
+
+    if config.write_time_out <= 0 {
+        return Err("The write time can't can be negative".to_string())
+    }
+    
+    if (1..=80).contains(&config.max_connection) {
+        return Err("The max-connnection needs to be in the range ->(0..80)".to_string())
+    }
+
+    Ok(())
+}
