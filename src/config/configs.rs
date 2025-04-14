@@ -1,5 +1,5 @@
 use clap::Parser;
-
+use std::fmt;
 
 #[derive(Parser, Debug)]
 #[command(name = "My Web Server", about = "A custom web server config")]
@@ -38,4 +38,39 @@ pub struct Config{
     
     #[arg( long = "maxconnection" , aliases = ["MaxConnection" , "mconnection" , "Maxconnection"] , default_value_t = 20)]
     pub max_connection : i16 ,
+}
+
+//Server Configuration into a dsiplay format.
+impl fmt::Display for Config {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "
+Server Configuration:
+---------------------
+Host              : {}
+Port              : {}
+Target URL        : {}
+Read Timeout      : {} seconds
+Write Timeout     : {} seconds
+Idle Timeout      : {} seconds
+Proxy Timeout     : {} seconds
+Max Header Bytes  : {}
+Cache Size        : {} KB
+Cache Time Limit  : {} seconds
+Max Connections   : {}
+            ",
+            self.host,
+            self.port,
+            self.target,
+            self.read_time_out,
+            self.write_time_out,
+            self.idle_time_out,
+            self.proxy_time_out,
+            self.max_header_bytes,
+            self.cache_size,
+            self.cache_time_limit,
+            self.max_connection
+        )
+    }
 }
